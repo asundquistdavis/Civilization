@@ -18,12 +18,10 @@ function Login() {
     };
 
     return (
-        <div id="signInButton">
-            <GoogleLogin
-                onSuccess={onSuccess}
-                onFailure={onFailure}
-            />
-        </div>
+        <GoogleLogin
+            onSuccess={onSuccess}
+            onFailure={onFailure}
+        />
     )
 };
 

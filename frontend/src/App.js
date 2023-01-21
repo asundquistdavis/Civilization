@@ -9,7 +9,7 @@ const clientId = '748775678800-crcoq8afjhu91pvjgabh6m59ijq41t14.apps.googleuserc
 function App () {
 
     return (
-        <GoogleOAuthProvider clientId={clientId}>
+
         <main className="container">
         <h1 className="text-uppercase text-center my-4">Civilization</h1>
         <div className="row">
@@ -20,7 +20,6 @@ function App () {
             </div>
         </div>
         </main>
-        </GoogleOAuthProvider>
     );
 }
 
