@@ -7,7 +7,7 @@ const clientId = '748775678800-crcoq8afjhu91pvjgabh6m59ijq41t14.apps.googleuserc
 function Logout() {
 
     const onSuccess = () => {
-        axios.post('/api/auth/logout/');
+        axios.post('/api/logout/');
     };
 
     return (

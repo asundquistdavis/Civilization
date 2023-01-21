@@ -7,7 +7,7 @@ const clientId = '748775678800-crcoq8afjhu91pvjgabh6m59ijq41t14.apps.googleuserc
 function Login() {
 
     const onSuccess = (res) => {
-        axios.post('/api/auth/login/', res.ProfileObj);
+        axios.post('/api/login/', res.ProfileObj);
     };
 
     const onFailure = (res) => {
