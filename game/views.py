@@ -32,3 +32,8 @@ class Login(APIView):
         print(g_profile)
         # player = Player(g_id=g_profile)
         return Response(g_profile, status=status.HTTP_201_CREATED)
+
+class Logout(APIView):
+    def post(self, request):
+        print('logged out')
+        return Response({'message': 'logged out'}, status=status.HTTP_200_OK)
