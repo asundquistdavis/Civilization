@@ -20,12 +20,8 @@ function Login() {
     return (
         <div id="signInButton">
             <GoogleLogin
-                clientId={clientId}
-                buttonText="login"
                 onSuccess={onSuccess}
                 onFailure={onFailure}
-                cookiePolicy={'single_host_origin'}
-                isSignedIn={true}
             />
         </div>
     )
