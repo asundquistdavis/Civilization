@@ -1,13 +1,16 @@
-import { GoogleLogin } from 'react-google-login';
+import { GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import React from 'react';
 
 const clientId = '748775678800-crcoq8afjhu91pvjgabh6m59ijq41t14.apps.googleusercontent.com';
 
-function Login() {
+async function Login() {
 
     const onSuccess = (res) => {
-        axios.post('/api/login/', res.ProfileObj);
+        axios
+        .post('/api/login/', res.ProfileObj)
+        .then(res => {console.log(res)})
+        .catch(err => {console.log(err)});
     };
 
     const onFailure = (res) => {

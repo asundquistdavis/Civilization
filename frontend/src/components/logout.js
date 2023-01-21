@@ -1,4 +1,5 @@
-import { GoogleLogout } from 'react-google-login';
+import { googleLogout } from '@react-oauth/google';
+import { Component } from 'react';
 import axios from 'axios';
 import React from 'react';
 
@@ -7,16 +8,18 @@ const clientId = '748775678800-crcoq8afjhu91pvjgabh6m59ijq41t14.apps.googleuserc
 function Logout() {
 
     const onSuccess = () => {
-        axios.post('/api/logout/');
+        axios.post('/api/logout/')
+        .then(res => {console.log(res)})
+        .catch(err => {console.log(err)});
     };
 
     return (
         <div id="signInButton">
-            <GoogleLogout
+            <button
                 clientId={clientId}
                 buttonText="logout"
-                onLogoutSuccess={onSuccess}
-            />
+                onLogoutSuccess={onSuccess}>
+            </button>
         </div>
     )
 };
