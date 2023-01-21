@@ -5,70 +5,40 @@ import Login from './components/login';
 import { useEffect } from 'react';
 import { gapi } from 'gapi-script';
 
-import { GoogleOAuthProvider } from '@react-oauth/google';
+import { googleLogout, GoogleOAuthProvider } from '@react-oauth/google';
 
 const clientID = '748775678800-crcoq8afjhu91pvjgabh6m59ijq41t14.apps.googleusercontent.com';
 
-// class App extends Component {
-//     constructor(props) {
-//         super(props);
-//     };
-
-//     componentDidMount = () => {
-//         useEffect(() => {
-//             function start() {
-//                 gapi.client.init({
-//                     clientID: clientID,
-//                     scope: ""
-//                 });
-//             };
-//         })
-//     };
-
-//     render() {
-//         return ( 
-//             <main className="container">
-//             <h1 className="text-uppercase text-center my-4">Civilization</h1>
-//             <div className="row">
-//                 <div className="col-md-6 col-sm-10 mx-auto p-0">
-//                 <div className="card p-3">
-//                     <Login/>
-//                     <Logout/>
-//                 </div>
-//                 </div>
-//             </div>
-//             </main>
-//         );
-//     };
-// }
-
 function App () {
-    // useEffect(() => {
-    //     function start() {
-    //         gapi.client.init({
-    //             clientID: clientID,
-    //             scope: ""
-    //         });
-    //     };
 
-    //     gapi.load('client:auth2', start);
-    // });
+    function handleCallbackResponse(res) {
+        console.log('Encoded JWT ID Token: ', res.credential);
+    };
+
+    useEffect(() => {
+        /* global google */
+        google.accounts.id.initialize({
+            clientID: clientID,
+            callback: handleCallbackResponse
+        });
+
+        google.accounts.id.renderButton(
+            document.getElementById('loginDiv'),
+            {theme: 'outline', size: 'large'}
+        );
+    }, []);
 
     return (
-        <GoogleOAuthProvider 
-        clientId={clientID}>
-            <main className="container">
-            <h1 className="text-uppercase text-center my-4">Civilization</h1>
-            <div className="row">
-                <div className="col-md-6 col-sm-10 mx-auto p-0">
-                <div className="card p-3">
-                    <Login/>
-                    {/* <Logout/> */}
-                </div>
-                </div>
+        <main className="container">
+        <h1 className="text-uppercase text-center my-4">Civilization</h1>
+        <div className="row">
+            <div className="col-md-6 col-sm-10 mx-auto p-0">
+            <div className="card p-3">
+                <div id='loginDiv'></div>
             </div>
-            </main>
-        </GoogleOAuthProvider>
+            </div>
+        </div>
+        </main>
     );
 }
 
