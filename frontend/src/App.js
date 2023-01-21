@@ -9,17 +9,18 @@ const clientId = '748775678800-crcoq8afjhu91pvjgabh6m59ijq41t14.apps.googleuserc
 function App () {
 
     return (
-
-        <main className="container">
-        <h1 className="text-uppercase text-center my-4">Civilization</h1>
-        <div className="row">
-            <div className="col-md-6 col-sm-10 mx-auto p-0">
-            <div className="card p-3">
-                <Login />
+        <GoogleOAuthProvider clientId={clientId}>
+            <main className="container">
+            <h1 className="text-uppercase text-center my-4">Civilization</h1>
+            <div className="row">
+                <div className="col-md-6 col-sm-10 mx-auto p-0">
+                <div className="card p-3">
+                    <Login />
+                </div>
+                </div>
             </div>
-            </div>
-        </div>
-        </main>
+            </main>
+        </GoogleOAuthProvider>
     );
 }
 

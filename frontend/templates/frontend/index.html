@@ -5,21 +5,10 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>My Site</title>
-        <script src="https://accounts.google.com/gsi/client" async defer></script>
-        <!-- <script>
-            window.onload = function () {
-                google.accounts.id.initialize({
-                    client_id: '748775678800-crcoq8afjhu91pvjgabh6m59ijq41t14.apps.googleusercontent.com',
-                    callback: handleCallbackResponse
-                });
-                google.accounts.id.prompt();
-            };
-          </script> -->
+        <!-- <script src="https://accounts.google.com/gsi/client" async defer></script> -->
     </head>
     <body>
-        <GoogleOAuthProvider clientId={clientId}>
-            <div id="app"></div>
-            {% render_bundle 'frontend' %}
-        <GoogleOAuthProvider clientId={clientId}>
+        <div id="app"></div>
+        {% render_bundle 'frontend' %}
     </body>
 </html>
