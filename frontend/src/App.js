@@ -16,7 +16,6 @@ function App () {
     };
 
     useEffect(() => {
-        /* global google */
         google.accounts.id.initialize({
             clientID: clientID,
             callback: handleCallbackResponse
