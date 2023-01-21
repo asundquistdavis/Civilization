@@ -4,7 +4,7 @@ import React from 'react';
 
 const clientId = '748775678800-crcoq8afjhu91pvjgabh6m59ijq41t14.apps.googleusercontent.com';
 
-async function Login() {
+function Login() {
 
     const onSuccess = (res) => {
         axios

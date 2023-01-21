@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import axios from 'axios'
+// import axios from 'axios'
 import Login from './components/login';
-import Logout from './components/logout';
+// import Logout from './components/logout';
 import { useEffect } from 'react';
 import { gapi } from 'gapi-script';
 
