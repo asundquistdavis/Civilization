@@ -6,8 +6,9 @@ from django.db.models.signals import post_save
 from django.utils.translation import gettext_lazy as gtl
 
 class Player(models.Model):
+    g_id = models.CharField(max_length=300)
     game = models.ForeignKey('Game', related_name='players', on_delete=models.SET_NULL, null=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def report(self):
         pass
@@ -107,14 +108,14 @@ class TradeCard(models.Model):
     level = models.IntegerField()
     amount = models.IntegerField()
 
-@receiver(post_save, sender=User)
-def create_player(sender, instance, created, **kwargs):
-    if created:
-        Player.objects.create(user=instance)
+# @receiver(post_save, sender=User)
+# def create_player(sender, instance, created, **kwargs):
+#     if created:
+#         Player.objects.create(user=instance)
 
-@receiver(post_save, sender=User)
-def save_player(sender, instance, **kwargs):
-    instance.player.save()
+# @receiver(post_save, sender=User)
+# def save_player(sender, instance, **kwargs):
+#     instance.player.save()
 
 @receiver(post_save, sender=Game)
 def create_game_settings(sender, instance, created, **kwargs):
