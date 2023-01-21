@@ -27,7 +27,7 @@ SECRET_KEY = "django-insecure-ghe-irz5zoyrnrelxaz!j^lzh*g_xlalh&s!j_t87y9==$^(o=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1:5000']
 
 if 'DYNO' in os.environ:
     SECRET_KEY = os.environ['SECRET_KEY']
@@ -124,6 +124,17 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
+
+# cookie settings
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+SECURE_HSTS_SECONDS = 1000
+
+SECURE_SSL_REDIRECT = True
+
+SESSION_COOKIE_SECURE = True
+
+CSRF_COOKIE_SECURE = True
 
 
 # Static files (CSS, JavaScript, Images)

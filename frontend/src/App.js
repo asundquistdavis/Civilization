@@ -1,33 +1,68 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import Login from './components/login';
+import Logout from './components/logout';
+import { useEffect } from 'react';
+import { gapi } from 'gapi-script';
 
-class App extends Component {
-    constructor(props) {
-        super(props);
-    };
+const clientID = '748775678800-crcoq8afjhu91pvjgabh6m59ijq41t14.apps.googleusercontent.com';
 
-    componentDidMount() {
-        axios
-        .post('http://localhost:5000/api/status/', {'username': 'andrew', 'password': 'abcarrow'}, {'method': 'post'})
-        .then((res) => this.setState(res.data))
-        .catch((err) => console.log(err));
-    };
+// class App extends Component {
+//     constructor(props) {
+//         super(props);
+//     };
 
+//     componentDidMount = () => {
+//         useEffect(() => {
+//             function start() {
+//                 gapi.client.init({
+//                     clientID: clientID,
+//                     scope: ""
+//                 });
+//             };
+//         })
+//     };
 
-    render() {
-        return ( 
-            <main className="container">
-            <h1 className="text-uppercase text-center my-4">Civilization</h1>
-            <div className="row">
-                <div className="col-md-6 col-sm-10 mx-auto p-0">
-                <div className="card p-3">
-                    {this.state.message}
-                </div>
-                </div>
+//     render() {
+//         return ( 
+//             <main className="container">
+//             <h1 className="text-uppercase text-center my-4">Civilization</h1>
+//             <div className="row">
+//                 <div className="col-md-6 col-sm-10 mx-auto p-0">
+//                 <div className="card p-3">
+//                     <Login/>
+//                     <Logout/>
+//                 </div>
+//                 </div>
+//             </div>
+//             </main>
+//         );
+//     };
+// }
+
+function App () {
+    useEffect(() => {
+        function start() {
+            gapi.client.init({
+                clientID: clientID,
+                scope: ""
+            });
+        };
+    });
+
+    return ( 
+        <main className="container">
+        <h1 className="text-uppercase text-center my-4">Civilization</h1>
+        <div className="row">
+            <div className="col-md-6 col-sm-10 mx-auto p-0">
+            <div className="card p-3">
+                <Login/>
+                <Logout/>
             </div>
-            </main>
-        );
-    }
+            </div>
+        </div>
+        </main>
+    );
 }
 
 export default App

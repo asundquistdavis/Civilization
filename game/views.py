@@ -19,3 +19,9 @@ class Status(APIView):
         user = User(username=username, password=password)
         user.save()
         return Response({'message':'success'}, status=status.HTTP_201_CREATED)
+
+class AuthUser(APIView):
+    def post(self, request):
+        profile = request.data
+        print(request.data)
+        return Response({'message':'success'}, status=status.HTTP_202_ACCEPTED)
