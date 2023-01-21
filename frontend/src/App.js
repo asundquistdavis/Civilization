@@ -5,6 +5,8 @@ import Login from './components/login';
 import { useEffect } from 'react';
 import { gapi } from 'gapi-script';
 
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 const clientID = '748775678800-crcoq8afjhu91pvjgabh6m59ijq41t14.apps.googleusercontent.com';
 
 // class App extends Component {
@@ -52,18 +54,21 @@ function App () {
         gapi.load('client:auth2', start);
     });
 
-    return ( 
-        <main className="container">
-        <h1 className="text-uppercase text-center my-4">Civilization</h1>
-        <div className="row">
-            <div className="col-md-6 col-sm-10 mx-auto p-0">
-            <div className="card p-3">
-                <Login/>
-                {/* <Logout/> */}
+    return (
+        <GoogleOAuthProvider 
+        clientId={clientID}>
+            <main className="container">
+            <h1 className="text-uppercase text-center my-4">Civilization</h1>
+            <div className="row">
+                <div className="col-md-6 col-sm-10 mx-auto p-0">
+                <div className="card p-3">
+                    <Login/>
+                    {/* <Logout/> */}
+                </div>
+                </div>
             </div>
-            </div>
-        </div>
-        </main>
+            </main>
+        </GoogleOAuthProvider>
     );
 }
 
