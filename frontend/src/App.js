@@ -43,16 +43,16 @@ const clientID = '748775678800-crcoq8afjhu91pvjgabh6m59ijq41t14.apps.googleuserc
 // }
 
 function App () {
-    useEffect(() => {
-        function start() {
-            gapi.client.init({
-                clientID: clientID,
-                scope: ""
-            });
-        };
+    // useEffect(() => {
+    //     function start() {
+    //         gapi.client.init({
+    //             clientID: clientID,
+    //             scope: ""
+    //         });
+    //     };
 
-        gapi.load('client:auth2', start);
-    });
+    //     gapi.load('client:auth2', start);
+    // });
 
     return (
         <GoogleOAuthProvider 
