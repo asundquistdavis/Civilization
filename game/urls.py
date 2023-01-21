@@ -1,7 +1,7 @@
 from django.urls import path
 
-from .views import Status
+from .views import Login
 
 urlpatterns = [
-    path('status/', Status.as_view(), name='api')
+    path('status/', Login.as_view(), name='login')
 ]
