@@ -17,10 +17,11 @@ from django.contrib import admin
 from django.urls import path, include
 from frontend.views import index
 
-from game import urls as api_urls
+from game import urls as api
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', index, name='index'),
-    path('api/', include(api_urls), name='api')
+    path('api/', include(api), name='api'),
+    path('', include('django.contrib.auth.urls')),
 ]
