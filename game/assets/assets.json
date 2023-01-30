@@ -1,0 +1,30 @@
+{
+    "boards":
+    [
+        {
+            "name": "test board #1",
+            "kwargs": 
+            {
+                "board_file": "test_board_1.json",
+                "territories_file": "test_territories_1.json",
+                "max_players": 2
+            }
+        }
+    ],
+    "civs":
+    [
+        {
+            "name": "egyptions",
+            "pcolor": "f1f1f1",
+            "scolor": "e0e0e0",
+            "start_territory": "Valentia",
+            "ast_rank": 1
+        },{
+            "name": "greeks",
+            "pcolor": "e005e0",
+            "scolor": "f110f1",
+            "start_territory": "Western Sicily",
+            "ast_rank": 2
+        }
+    ]
+}

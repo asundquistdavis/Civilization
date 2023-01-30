@@ -1,8 +1,8 @@
 from django.urls import path
-
-from .views import Login, Logout
+from .api import Load, PreGame, StartTurn, Movement, Trade, EndTurn, test
 
 urlpatterns = [
-    path('login/', Login.as_view(), name='login'),
-    path('logout/', Logout.as_view(), name='logout'),
+    path('load/', Load.as_view(), name='load'),
+    path('pre-game/', PreGame.as_view(), name='pre game'),
+    path('test/', test, name='test api'),
 ]
