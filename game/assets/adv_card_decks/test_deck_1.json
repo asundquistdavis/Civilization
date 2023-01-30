@@ -1,0 +1,127 @@
+[
+    {
+        "name": "cloth making",
+        "price": 50,
+        "desc": "your ships are allowed to move 5 spaces.",
+        "color_1": "orange",
+        "color_2": "",
+        "credit_from": "", 
+        "credit_from_amount": 0, 
+        "credit_for": "naval warfare",
+        "credit_for_amount": 10, 
+        "affinities": [
+            {
+                "credit": 10,
+                "color": "orange"
+            },{
+                "credit": 5,
+                "color": "blue"
+            }
+        ]
+    },{
+        "name": "mysticism",
+        "price": 50,
+        "desc": "superstition: reduce 1 less city.",
+        "color_1": "blue",
+        "color_2": "yellow",
+        "credit_from": "", 
+        "credit_from_amount": 0, 
+        "credit_for": "monument",
+        "credit_for_amount": 10, 
+        "affinities": [
+            {
+                "credit": 5,
+                "color": "blue"
+            },{
+                "credit": 5,
+                "color": "yellow"
+            }
+        ]
+    },{
+        "name": "sculpture",
+        "price": 50,
+        "desc": "tyranny: the benneficiary selects and annexes 5 less points.",
+        "color_1": "blue",
+        "color_2": "",
+        "credit_from": "", 
+        "credit_from_amount": 0, 
+        "credit_for": "architecture",
+        "credit_for_amount": 10, 
+        "affinities": [
+            {
+                "credit": 5,
+                "color": "red"
+            },{
+                "credit": 10,
+                "color": "blue"
+            }
+        ]
+    },{
+        "name": "urbanism",
+        "price": 50,
+        "desc": "once per turn, when constructing a wilderness city you may choose to use up to 4 tokens fri areas adjacent by land.",
+        "color_1": "red",
+        "color_2": "",
+        "credit_from": "", 
+        "credit_from_amount": 0, 
+        "credit_for": "diplomacy",
+        "credit_for_amount": 10, 
+        "affinities": [
+            {
+                "credit": 10,
+                "color": "red"
+            },{
+                "credit": 5,
+                "color": "green"
+            }
+        ]
+    },{
+        "name": "empiricism",
+        "price": 60,
+        "desc": "",
+        "color_1": "green",
+        "color_2": "",
+        "credit_from": "", 
+        "credit_from_amount": 0, 
+        "credit_for": "medicine",
+        "credit_for_amount": 10, 
+        "affinities": [
+            {
+                "credit": 5,
+                "color": "red"
+            },{
+                "credit": 5,
+                "color": "blue"
+            },{
+                "credit": 5,
+                "color": "orange"
+            },{
+                "credit": 5,
+                "color": "yellow"
+            },{
+                "credit": 5,
+                "color": "green"
+            }
+        ]
+    },{
+        "name": "masonry",
+        "price": 60,
+        "desc": "cyclone: reduce 1 less of your selected cities.",
+        "color_1": "orange",
+        "color_2": "",
+        "credit_from": "", 
+        "credit_from_amount": 0, 
+        "credit_for": "engineering",
+        "credit_for_amount": 10, 
+        "affinities": [
+            {
+                "credit": 10,
+                "color": "orange"
+            },{
+                "credit": 5,
+                "color": "green"
+            }
+        ]
+    }
+
+]

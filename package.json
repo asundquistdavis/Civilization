@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack --config webpack.config.js --watch --mode development",
-    "build": "webpack --config webpack.config.js --mode production"
+    "build": "webpack --config webpack.config.js --mode production",
+    "start": "react-scripts start"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
     "bootstrap": "^4.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-scripts": "^5.0.1",
     "reactstrap": "^9.1.5"
   },
   "devDependencies": {
@@ -37,5 +39,17 @@
     "webpack": "^5.75.0",
     "webpack-bundle-tracker": "^0.4.3",
     "webpack-cli": "^5.0.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
