@@ -8,7 +8,7 @@ class Load(APIView):
     def get(self, req):
 
         # simulate logging in, and starting new game with new game settings, civ, adv cards ect
-        # _test_(req)
+        _test_(req)
 
         player:Player = req.user.player
         info = player.load_info()

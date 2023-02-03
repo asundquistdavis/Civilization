@@ -56,6 +56,10 @@ class Player(models.Model):
     def points_on_cards(self):
         return sum(adv_card.card_info.points for adv_card in self.adv_cards.all())
 
+    @property
+    def points(self):
+        return self.points_on_cards + self.ast_position * 5
+
     # adv card properties/methods
     @property
     def adv_cards_list(self):
@@ -79,7 +83,7 @@ class Player(models.Model):
                 'board': game.board, #json
                 'players': game.players_info(), #list[str]
                 'territories': game.territories_info(), #list[str]
-                'adv_cards': game.adv_cards_info(self), #list[str]
+                'advCards': game.adv_cards_info(self), #list[str]
             }
         else:
             info = {
@@ -87,7 +91,9 @@ class Player(models.Model):
                 'gameId': game.id, #int
                 'turn': game.phase.turn, #int
                 'phase': game.phase.name, #str
-                'players': game.players_info(lite=True), #list[str]
+                'players': game.players_info(), #list[dict],
+                'territories': game.territories_info(), #list[dict]
+                'board': game.board, #list[dict]
                 **game.settings.get_boards_civs(),
             }
         return info
@@ -147,35 +153,27 @@ class Player(models.Model):
         }
         return info
 
-    def info(self, lite=False):
-        if lite:
-            info = {
-                'id': self.id, #int
-                'username': self.username, #str
-                'civ': self.civ_name, #str
-                'pcolor': self.civ.pcolor, #str
-                'scolor': self.civ.scolor, #str
-                'astRank': self.ast_rank, #int
-                }
-        else:
-            info = {
-                'id': self.id, #int
-                'username': self.username, #str
-                'civ': self.civ_name, #str
-                'pcolor': self.civ.pcolor, #str
-                'scolor': self.civ.scolor, #str
-                'astRank': self.ast_rank, #int
-                'isActivePlayer': True if self.game.active_player.id==self.id else False, #bool
-                'treasury': self.treasury, #int
-                'tax': self.tax, #int
-                'backTax': self.back_tax, #int 
-                'census': self.census, #int 
-                'stock': self.stock, #int
-                'units': self.units, #int
-                'cities': self.cities, #int
-                'movementOrder': self.movement_order, #int
-                'benneficiaryOrder': self.benneficiary_order, #int
-                'advCards': [adv_card.info(self).id for adv_card in self.adv_cards.all()], #list[dict]
+    def info(self):
+        info = {
+            'id': self.id, #int
+            'username': self.username, #str
+            'civ': self.civ_name, #str
+            'pcolor': self.civ.pcolor, #str
+            'scolor': self.civ.scolor, #str
+            'astRank': self.ast_rank, #int
+            'isActivePlayer': True if self.game.active_player.id==self.id else False, #bool
+            'treasury': self.treasury, #int
+            'tax': self.tax, #int
+            'backTax': self.back_tax, #int 
+            'census': self.census, #int 
+            'stock': self.stock, #int
+            'units': self.units, #int
+            'cities': self.cities, #int
+            'points': self.points, #int
+            'movementOrder': self.movement_order, #int
+            'benneficiaryOrder': self.benneficiary_order, #int
+            'advCards': [adv_card.info(self).id for adv_card in self.adv_cards.all()], #list[int]
+            'tradeCards': [trade_card.info() for trade_card in self.trade_cards.all()], #list[dict]
         }
         return info
 
@@ -217,7 +215,7 @@ class Game(models.Model):
     active_player:Player = models.ForeignKey(Player, related_name='active_in_game', default=None, on_delete=models.SET_NULL, null=True)
     settings = models.OneToOneField('GameSettings', related_name='game', default=None, on_delete=models.SET_NULL, null=True)
     phase = models.OneToOneField('Phase', related_name='game', on_delete=models.SET_NULL, default=None, null=True)
-    board = models.JSONField()
+    board = models.JSONField(null=True)
 
     # settings properties - read only
     @property
@@ -412,6 +410,7 @@ class AdjacentTerritory(models.Model):
 class Boat(models.Model):
     upkeep_paid = models.BooleanField(default=False)
     territory = models.ForeignKey('PlayerTerritory', related_name='boats', on_delete=models.CASCADE)
+    player = models.ForeignKey(Player, related_name='boats', on_delete=models.CASCADE)
 
     @property
     def info(self):
@@ -473,6 +472,9 @@ class AdvCard(models.Model):
             'price': self.price, #int
             'points': self.points, #int
             'creditFor': self.credit_for, #str
+            'creditForAmount': self.credit_for_amount, #int
+            'creditFrom': self.credit_from, #str
+            'creditFromAmount': self.credit_from_amount, #int
             'color1': self.color_1, #str
             'color2': self.color_2, #str
             'affinities': [affinity.info() for affinity in self.affinities.all()], #list[dict]
@@ -515,7 +517,7 @@ class TradeCard(models.Model):
         info = {
             'name': self.name, #str
             'level': self.level, #int
-            'maxSet': self.max_set #intnbvfg
+            'maxSet': self.max_set #int
         }
         return info
 
@@ -529,8 +531,12 @@ def save_player(sender, instance, **kwargs):
     instance.player.save()
 
 def get_or_create(Model, **kwargs)->object:
-    try:
-        model = Model.objects.filter(**kwargs)[0]
-    except IndexError:
-        model = Model.objects.create(**kwargs)
+    if 'id' in kwargs.keys():
+        model = Model(**kwargs)
+        model.save()
+    else:
+        try:
+            model = Model.objects.filter(**kwargs)[0]
+        except IndexError:
+            model = Model.objects.create(**kwargs)
     return model

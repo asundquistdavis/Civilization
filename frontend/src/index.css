@@ -1,0 +1,256 @@
+body {
+    margin: 0;
+}
+
+main.container {
+    height: 100%;
+    width: 100%;
+    padding: 0%;
+    margin: 0%;
+    display: flex;
+    padding-top: 1%;
+}
+
+div.col {
+    padding-right: 1%;
+}
+
+div.col:first-child {
+    padding-left: 1%;
+}
+
+div.left {
+    width: 20%;
+}
+
+div.center {
+    width: 60%;
+    height: 100%;
+}
+
+div.right {
+    width: 20%;
+}
+
+div.row.top {
+    padding-bottom: 1%;
+}
+
+.title {
+    text-align: center;
+    font-size: 150%;
+    padding: 0px;
+}
+
+.subtitle {
+    font-size: 100%;
+    text-align: center;
+    padding: 0px;
+}
+
+div.header {
+    padding: 1%;
+    border-radius: 10px;
+    border: 1px solid;
+    background-color: #faf9ff;
+}
+
+div.board {
+    border: 1px solid;
+    padding: 0;
+}
+
+div.panel {
+    border-radius: 10px;
+    border: 1px solid;
+    background-color: #faf9ff;
+    padding: 5%;
+}
+
+div.header {
+    position: relative;
+}
+
+div.header div.button {
+    text-align: center;
+    border-radius: 15px;
+    border: 1px solid;
+    background-color: #ced4da;
+    padding: 0%;
+    top: 32.5%;
+    height: 35%;
+    position: absolute;
+}
+
+div.header div.button:hover {
+    box-shadow: 3px 3px 3px gray;
+}
+
+div.header div.left {
+    left: 0%;
+    width: 10%;
+    margin-left: 1%;
+}
+
+div.header div.right {
+    right: 0%;
+    width: 15%;
+    margin-right: 1%;
+}
+
+#board {
+    padding: 0;
+    height: 500px;
+}
+
+div#players.panel {
+    position: relative;
+}
+
+div.card {
+    border-radius: 5px;
+    border: 1px solid;
+    /* height: 100px; */
+    position: relative;
+}
+
+div.playercard {
+    padding: 0px;
+    cursor: pointer;
+    position: relative;
+    padding:2%;
+}
+
+div.card:hover {
+    box-shadow: 3px 3px 5px gray;
+}
+
+div.panel hr {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+div.panel ul {
+    list-style-type: none;
+    padding: 0%;
+    margin: 0;
+}
+
+div.panel li {
+    margin-bottom: 5%;
+}
+
+div.panel li:last-child{
+    margin:0%;
+}
+
+div.panel div.playerleft {
+    padding-left: 5%;
+    left: 0%;
+    width: 75%;
+}
+
+div#players.panel div.name {
+    font-size: 150%;
+}
+
+div#players.panel div.civ {
+    font-size: 100%;
+    margin: 0%;
+    padding: 0%;
+}
+
+div#players.panel div.info {
+    font-size: 100%;
+    margin: 0%;
+    padding: 0%;
+}
+
+div#players.panel div.infotype {
+    font-size: 100%;
+}
+
+div#players.panel div.playerright {
+    position: absolute;
+    font-size: .5rw;
+    text-align: center;
+    border-radius: 5%;
+    border: 1px solid;
+    width:  40%;
+    max-height: 70%;
+    right: 5%;
+    top: 15%;
+}
+
+div.modal {
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 9999;
+    width: 100%;
+    height: 100%;
+    padding-top: 5%;
+    background-color: black;
+    background-color: rgba(0, 0, 0, 0.4);
+    -webkit-transition: 0.5s;
+    overflow: auto;
+    transition: all 0.3s linear;
+}
+
+div.modal div.modal-content{
+    margin: auto;
+    width: 300px;
+    background-color: #faf9ff;
+    border-radius: 10px;
+    border: 1px solid;
+}
+
+div.modal div.modal-content div.modal-header {
+    display:flex;
+    position: relative;
+}
+
+div.modal div.modal-content div.modal-header div.title {
+    margin: auto;
+}
+
+div.modal div.modal-content div.modal-header div.subtitle.close {
+    position: absolute;
+    right: 0%;
+    margin: 2%;
+    padding:1.5%;
+    color: #000000;
+    background-color: red;
+    font-size: 50%;
+    border-radius: 50%;
+    border: 1px solid;
+  }
+
+div.modal div.modal-content div.modal-header div.subtitle.close:hover {
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 1px 1px 5px gray;
+}
+
+div.modal div.modal-content hr {
+    padding-left: 45%;
+    padding-right: 45%;
+}
+
+div.modal div.modal-content div.modal-body ul {
+    margin-left: 5%;
+    padding: 0;
+}
+
+div.modal div.modal-content div.modal-body ul li {
+    position: relative;
+    list-style: none;
+    font-size: 100%;
+}
+
+div.modal div.modal-content ul li span.right {
+    position: absolute;
+    right: 5%
+}
+

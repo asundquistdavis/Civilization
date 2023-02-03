@@ -13,9 +13,21 @@ def _test_(req):
     # set test user's game to test game
     user.player.game = game
     # create test civ
-    civ = get_or_create(Civ, name='egyptians', pcolor='f1f1f1', scolor='e0e0e0', start_territory='upper nile', ast_rank=1)
+    civ = get_or_create(Civ, name='egyptians', pcolor='#f8f8cb', scolor='000000', start_territory='upper nile', ast_rank=1)
     # assign test civ to test user
     user.player.civ = civ
+    # get second user
+    user2:User = get_or_create(User, id=2, username='test2')
+    # create player
+    player2:Player = get_or_create(Player, id=2, user=user2)
+    # bind player to user
+    user2.player = player2
+    # add player2 to game
+    player2.game = game
+    # create second civ
+    civ2:Civ = get_or_create(Civ, name='minoans', pcolor='#0dd74a', scolor='000000', start_territory='crete', ast_rank=2)
+    # bind civ to player
+    player2.civ = civ2
     # create test 'pre game' phase
     phase = get_or_create(Phase, name='pre game', duration=999_999_999, turn=0)
     # assign test phase to current game
@@ -34,3 +46,4 @@ def _test_(req):
     game.active_player = user.player
     game.save()
     user.save()
+    user2.save()
