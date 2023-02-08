@@ -2,6 +2,28 @@ import { latLng, latLngBounds } from "leaflet";
 import React, { Component, createRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, GeoJSON } from "react-leaflet";
 
+export const renderLoginRequired = () => {
+    return (
+        <div
+            id="board"
+            className="no-board">
+            <a className="login" href='/login/'>
+                Login Here
+            </a>
+        </div>
+    );
+};
+
+export const renderNoBoard = () => {
+    return (
+        <div
+            id="board"
+            className="no-board">
+                No board selected
+        </div>
+    );
+};
+
 class Board extends Component {
 
     constructor(props) {
@@ -84,61 +106,48 @@ class Board extends Component {
     
     render() {
 
-        if (this.props.board) {
-
-            const geojson = {
-                type: "FeatureCollection",
-                features: this.props.territories.map(territory => {
-                    return {
-                        type: "Feature",
-                        properties: {
-                            id: territory.id,
-                            name: territory.name,
-                            type: territory.type,
-                            support: territory.support,
-                            adjacencies: territory.adjacencies,
-                            hasCityCite: territory.hasCityCite,
-                            players: territory.players
-                        },
-                        geometry: territory.geometry
-                    };
-                })
-            };
-
-        const mapBounds = latLngBounds(...this.props.board.map(coor => latLng([coor[1], coor[0]])));
-
-            return (
-                <div
-                    className="board">
-                        <MapContainer 
-                            ref={this.board}
-                            center={mapBounds.getCenter()}
-                            maxBounds={mapBounds}
-                            zoom={6}
-                            maxBoundsViscosity={1}
-                            id="board">
-                            <TileLayer
-                                attribution= '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="https://carto.com/attribution">CARTO</a>'
-                                url='https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
-                                maxZoom={8}
-                                minZoom={6}
-                            />
-                            <GeoJSON
-                                data={geojson} 
-                                ref={this.territories}
-                                style={this.drawTerritories}
-                                onEachFeature={this.onEachTerritory} 
-                                 />
-
-                        </MapContainer>
-                </div>
-            );
-
-        } else {
-
-            return null;
-        
+        const geojson = {
+            type: "FeatureCollection",
+            features: this.props.territories.map(territory => {
+                return {
+                    type: "Feature",
+                    properties: {
+                        id: territory.id,
+                        name: territory.name,
+                        type: territory.type,
+                        support: territory.support,
+                        adjacencies: territory.adjacencies,
+                        hasCityCite: territory.hasCityCite,
+                        players: territory.players
+                    },
+                    geometry: territory.geometry
+                };
+            })
         };
+
+    const mapBounds = latLngBounds(...this.props.board.map(coor => latLng([coor[1], coor[0]])));
+
+        return (
+            <MapContainer 
+                ref={this.board}
+                center={mapBounds.getCenter()}
+                maxBounds={mapBounds}
+                zoom={6}
+                maxBoundsViscosity={1}
+                id="board">
+                <TileLayer
+                    attribution= '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="https://carto.com/attribution">CARTO</a>'
+                    url='https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
+                    maxZoom={8}
+                    minZoom={6}
+                />
+                <GeoJSON
+                    data={geojson} 
+                    ref={this.territories}
+                    style={this.drawTerritories}
+                    onEachFeature={this.onEachTerritory} />
+            </MapContainer>
+        );
     };
 };
 

@@ -13,7 +13,7 @@ export default function renderInfo() {
                     </div>
                     <div                
                     className='close subtitle close'
-                    onClick={this.toggleInfo}>
+                    onClick={this.toggleInfo} >
                         {this.state.xChar}
                     </div>
                 </div>

@@ -1,7 +1,8 @@
 import React from "react";
 
 function renderPlayers() {
-    const orderedPlayers = this.state.players.sort((a, b) => this.orderPlayers(a, b, this.state.playersOrder))
+
+    const orderedPlayers = this.state.players? this.state.players.sort((a, b) => this.orderPlayers(a, b, this.state.playersOrder)): null
 
     return (
         <div 
@@ -17,11 +18,11 @@ function renderPlayers() {
             <hr></hr>
             <div>
                 <ul>
-                    {orderedPlayers.map((player, index)=>(
+                    {this.state.players? orderedPlayers.map((player, index)=>(
                     <li key={index}>
                     {this.renderPlayerCard(player)}
                     </li>
-                    ))}
+                    )): null}
                 </ul>
             </div>
         </div>

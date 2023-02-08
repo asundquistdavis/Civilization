@@ -1,0 +1,23 @@
+{% extends 'registration/base.html' %}
+
+{% block registration %}
+<div class="box">
+    <div class="header">
+        Login
+    </div>
+    <div class="body">
+        <form method="post">
+            {% csrf_token %}
+            <div class="field">
+                <label for="{{ form.username.id_for_label }}">Username:</label>
+                {{ form.username }}
+            </div>
+            <div class="field">
+                <label for="{{ form.password.id_for_label }}">Password:</label>
+                {{ form.password }}
+            </div>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

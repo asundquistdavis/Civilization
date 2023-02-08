@@ -7,215 +7,16 @@ from datetime import datetime, timedelta
 from json import load
 import os
 from pathlib import Path
-
-class Player(models.Model):
-    game = models.ForeignKey('Game', related_name='players', on_delete=models.SET_NULL, null=True)
-    user:User = models.OneToOneField(User, on_delete=models.CASCADE)
-    civ = models.ForeignKey('Civ', default=None, related_name='void', on_delete=models.SET_NULL, null=True)
-    treasury:int = models.IntegerField(default=0)
-    tax_rate:int = models.IntegerField(default=2)
-    pays_tax:bool = models.BooleanField(default=False)
-    back_tax:int = models.IntegerField(default=0)
-    census:int = models.IntegerField(default=0)
-    ast_position:int = models.IntegerField(default=0)
-    adv_credits = models.ForeignKey('PlayerCredit', related_name='void', default=None, on_delete=models.SET_NULL, null=True)
-
-    # user properties - read only
-    @property
-    def username(self)->str:
-        return self.user.username
-
-    # civ properties - read only
-    @property
-    def civ_name(self)->str:
-        return self.civ.name
-
-    @property
-    def ast_rank(self)->int:
-        return self.civ.ast_rank
-
-    # pieces properties - read only
-    @property
-    def units(self)->int:
-        return sum(territory.units for territory in self.territories.all())
-
-    @property
-    def stock(self)->int:
-        return self.game.max_stock - self.units - self.treasury
-
-    @property
-    def cities(self)->int:
-        return sum(territory.has_city for territory in self.territories.all())
-
-    @property
-    def tax(self)->int:
-        return (self.tax_rate*self.cities)*self.pays_tax
-
-    # score related properties
-    @property
-    def points_on_cards(self):
-        return sum(adv_card.card_info.points for adv_card in self.adv_cards.all())
-
-    @property
-    def points(self):
-        return self.points_on_cards + self.ast_position * 5
-
-    # adv card properties/methods
-    @property
-    def adv_cards_list(self):
-        return [adv_card.card_info.name for adv_card in self.adv_cards.all()]
-
-    def credit(self, color):
-        return sum(affinity.credit for adv_car in self.adv_cards.all() for affinity in adv_car.card_info.affinities.all() if affinity.color == color)
-
-    # methods for sending and receiving data (serialization)
-       # get all territories:
-    def load_info(self):
-        game = self.game
-        if self.game.phase.name in self.game.PHASES:
-            info = {
-                'playerId': self.id, #int
-                'gameId': game.id, #int
-                'turn': game.phase.turn, #int
-                'phase': game.phase.name, #str
-                'activePlayerId': game.active_player.id, #int
-                'isActivePlayer': True if game.active_player.id == self.id else False,
-                'board': game.board, #json
-                'players': game.players_info(), #list[str]
-                'territories': game.territories_info(), #list[str]
-                'advCards': game.adv_cards_info(self), #list[str]
-            }
-        else:
-            info = {
-                'playerId': self.id, #int
-                'gameId': game.id, #int
-                'turn': game.phase.turn, #int
-                'phase': game.phase.name, #str
-                'players': game.players_info(), #list[dict],
-                'territories': game.territories_info(), #list[dict]
-                'board': game.board, #list[dict]
-                **game.settings.get_boards_civs(),
-            }
-        return info
-
-    def status_info(self):
-        info = {
-            
-        }
-        return info
-
-    def pregame_info(self):
-        info = {
-
-        }
-        return info
-
-    def pregame(self, report):
-        path = os.path.join(Path(__file__).parent, 'assets', 'assets.json')
-        with open(path, 'r') as assets_file:
-            assets = load(assets_file)
-        board = list(filter(lambda board: board['name']==report['boardName'], assets['boards']))[0]
-        board_kwargs = board['kwargs']
-        GameSettings(game=self.game, **board_kwargs).save()
-        self.save()
-        for player_civ in report['playerCivs']:
-            civ_kwargs= list(filter(lambda civ: civ['name']==player_civ['civName'], assets['civs']))[0]
-            civ = get_or_create(Civ, **civ_kwargs)
-            Player.objects.update(id=player_civ['playerId'], civ=civ)
-        if report['startGame']:
-            self.game.start()
-        info = {
-            'message': 'success'
-        }
-        return info
-
-    def startturn_info(self):
-        info = {
-
-        }
-        return info
-
-    def movement_info(self):
-        info = {
-
-        }
-        return info
-
-    def trade_info(self):
-        info = {
-
-        }
-        return info
-
-    def endturn_info(self):
-        info = {
-
-        }
-        return info
-
-    def info(self):
-        info = {
-            'id': self.id, #int
-            'username': self.username, #str
-            'civ': self.civ_name, #str
-            'pcolor': self.civ.pcolor, #str
-            'scolor': self.civ.scolor, #str
-            'astRank': self.ast_rank, #int
-            'isActivePlayer': True if self.game.active_player.id==self.id else False, #bool
-            'treasury': self.treasury, #int
-            'tax': self.tax, #int
-            'backTax': self.back_tax, #int 
-            'census': self.census, #int 
-            'stock': self.stock, #int
-            'units': self.units, #int
-            'cities': self.cities, #int
-            'points': self.points, #int
-            'movementOrder': self.movement_order, #int
-            'benneficiaryOrder': self.benneficiary_order, #int
-            'advCards': [adv_card.info(self).id for adv_card in self.adv_cards.all()], #list[int]
-            'tradeCards': [trade_card.info() for trade_card in self.trade_cards.all()], #list[dict]
-        }
-        return info
-
-    # ordering players
-    @property
-    def movement_order(self):
-        return self.game.player_order(strat='movemenet').index(self)
-    @property
-    def benneficiary_order(self):
-        return self.game.player_order(strat='benneficiary').index(self)
-    
-    # parts of play
-    def collect_tax(self)->None:
-        if (back_tax := self.tax - self.treasury) <= 0:
-            self.treasury += self.tax
-            self.save()
-        self.treasury = 0
-        self.back_tax = back_tax
-        self.save()
-
-    def set_census(self)->None:
-        census = self.units
-        self.census = census
-        self.save()
-        return census
-    
-    # def commit_movement(self, report):
-    #     turn = self.game.turn
-    #     staged_moves = StagedMove.objects.filter(player=self, turn=turn).all()
-    #     for staged_move in staged_moves:
-    #         pass
-
-    # python methods
-    def __str__(self)->str:
-        return f'player: {self.user.username}'
+from .classes.Player import Player
+from .classes.Civ import Civ
+from .utils import get_or_create
 
 class Game(models.Model):
     phase = models.ForeignKey('Phase', on_delete=models.SET_NULL, null=True)
     active_player:Player = models.ForeignKey(Player, related_name='active_in_game', default=None, on_delete=models.SET_NULL, null=True)
     settings = models.OneToOneField('GameSettings', related_name='game', default=None, on_delete=models.SET_NULL, null=True)
     phase = models.OneToOneField('Phase', related_name='game', on_delete=models.SET_NULL, default=None, null=True)
-    board = models.JSONField(null=True)
+    host = models.ForeignKey(Player, related_name='host_for', on_delete=models.CASCADE)
 
     # settings properties - read only
     @property
@@ -230,7 +31,9 @@ class Game(models.Model):
     @property
     def timespan(self)->int:
         return self.settings.timespan
-
+    @property
+    def board(self)->dict:
+        return self.settings.board.board_geometry
     PHASES = (
         # pre game,
         'start of turn',
@@ -239,21 +42,27 @@ class Game(models.Model):
         'end of turn',
     )
 
-    # managing time properties/methods
-    @property
-    def clock(self)->datetime:
-        return now() - self.start_time
+    def desc(self):
+        return {
+            'id': self.id,
+            'name': str(self),
+            'players': [player.id for player in self.players.all()],
+            'maxPlayers': self.max_players,
+            'host': self.host.username,
+        }
 
-    def phase_duration(self, phase_name):
-        return self.timespan
+    def get_games(self):
+        return [game.desc() for game in Game.objects.all()]
 
     # methods to determine oder of play
     def player_order(self, strat='movement'):
         players = self.players.all()
         if strat=='benneficiary':
-            metric = lambda player: self.max_cities - player.cities + player.stock/(self.max_stock+1) + (1-player.ast_rank/(self.max_players+1))/(self.max_stock+1)
+            metric = lambda player: self.max_cities - player.cities + player.stock/(self.max_stock+1) + (1-player.ast_rank/(self.max_players+1))/(self.max_stock+1)\
+                if self.max_cities and player.cities and player.stock and self.max_stock and player.ast_rank and self.max_players else 0
         else:
-            metric = lambda player: player.census + 1-player.ast_rank/(self.max_players+1)
+            metric = lambda player: player.census + 1-player.ast_rank/(self.max_players+1)\
+                if player.census and player.ast_rank and self.max_players else 0
         return sorted(players, key=metric, reverse=True)
 
     # methods for sending and receiving data (serialization)
@@ -269,8 +78,37 @@ class Game(models.Model):
         return [adv_card.info(player) for adv_card in self.adv_cards.all()]
 
     # process methods
+
+    @staticmethod
+    def add_game(player):
+        settings = GameSettings()
+        settings.save()
+        phase = Phase(name='pre game')
+        phase.save()
+        game = Game(host=player, settings=settings, phase=phase, active_player= player)
+        game.save()
+        player.game = game
+        player.save()
+
+    def add_player(self, player):
+        player.game = self
+        player.civ = None
+        player.save()
+
+    def select_board(self, report):
+        board_id = report['boardId']
+        board = Board.objects.get(id=board_id)
+        self.board = board
+        self.save()
+
     def start(self):
-        pass
+        # check that game can start - settings, players selected civs - assign defaults ect.
+        # pass
+        # crerat the start of turn phase phase
+        phase = Phase(name=self.PHASES[0], duration=self.timespan)
+        # run start of turn
+        self.start
+        return info
 
     def load_adv_card_deck(self):
         path = os.path.join(Path(__file__).parent, 'assets', 'adv_card_decks', self.settings.adv_card_deck)
@@ -285,33 +123,30 @@ class Game(models.Model):
         return self.adv_cards
 
     def load_board(self):
-        path = os.path.join(Path(__file__).parent, 'assets', 'board_files', self.settings.board_file)
+        path = os.path.join(Path(__file__).parent, 'assets', 'board_files', self.settings.board.board_file)
         with open(path, 'r') as board_file:
             self.board = load(board_file)
         return self.board
 
     def load_territories(self):
-        path = os.path.join(Path(__file__).parent, 'assets', 'territories_files', self.settings.territories_file)
+        path = os.path.join(Path(__file__).parent, 'assets', 'territories_files', self.settings.board.territories_file)
         with open(path, 'r') as territories_file:
             features = load(territories_file)['features']
-            for feature in features:
-                properties = {prop:value for prop, value in feature['properties'].items() if prop != 'adjacent'}
-                geometry = feature['geometry']
-                get_or_create(Territory, game=self, geometry=geometry, **properties)
-            for feature in features:
-                adjacencies = feature['properties']['adjacent']
-                parent_name = feature['properties']['name']
-                parent = Territory.objects.get(game=self, name=parent_name)
-                for child_name in adjacencies:
-                    child = Territory.objects.get(game=self, name=child_name)
-                    get_or_create(AdjacentTerritory, parent=parent, child=child)
+        for feature in features:
+            properties = {prop:value for prop, value in feature['properties'].items() if prop != 'adjacent'}
+            geometry = feature['geometry']
+            get_or_create(Territory, game=self, geometry=geometry, **properties)
+        for feature in features:
+            adjacencies = feature['properties']['adjacent']
+            parent_name = feature['properties']['name']
+            parent = Territory.objects.get(game=self, name=parent_name)
+            for child_name in adjacencies:
+                child = Territory.objects.get(game=self, name=child_name)
+                get_or_create(AdjacentTerritory, parent=parent, child=child)
 
         return self.territories
 
     # parts of play
-    def pre_game(self):
-        pass
-
     def collect_taxes(self)->None:
         [player.collect_tax() for player in self.players.all()]
 
@@ -328,10 +163,41 @@ class Game(models.Model):
     def __str__(self):
         return f'#{self.id}'
 
+class GameSettings(models.Model):
+    board = models.ForeignKey('Board', related_name='void', default=None, on_delete=models.SET_NULL, null=True)
+    adv_card_deck = models.CharField(max_length=50, default=None, null=True)
+    max_stock = models.IntegerField(default=55)
+    max_cities = models.IntegerField(default=9)
+    timespan = models.IntegerField(default=None, null=True)
+
+    # board properties
+    @property
+    def max_players(self):
+        return self.board.max_players if self.board else None
+
+    def assets(self):
+        path = os.path.join(Path(__file__).parent, 'assets', 'assets.json')
+        with open(path, 'r') as assets_file:
+            assets = load(assets_file)
+        for board_kwargs in assets['boards']:
+            get_or_create(Board, game_settings=self, **board_kwargs)
+        for civ_kwargs in assets['civs']:
+            get_or_create(Civ, game_settings=self, **civ_kwargs)
+        self.board = self.boards.all()[0]
+        return {
+            'boards': [board.desc() for board in Board.objects.filter(game_settings=self)],
+            'civs': [civ.desc() for civ in Civ.objects.filter(game_settings=self)],
+            'advCards': None,
+            'tradeCards': None,
+        }
+
+    def __str__(self):
+        return f'game settings {self.id}'
+
 class Phase(models.Model):
     start = models.DateTimeField(default=now)
-    turn = models.IntegerField()
-    duration = models.IntegerField()
+    turn = models.IntegerField(default=0)
+    duration = models.IntegerField(default=0)
     name = models.CharField(max_length=20)
 
     @property
@@ -343,27 +209,22 @@ class Phase(models.Model):
     def __str__(self):
         return f'Phase: {self.name}'
 
-class GameSettings(models.Model):
-    board_name = models.CharField(max_length=50, default=None, null=True)
-    board_file = models.CharField(max_length=50, default=None, null=True)
-    territories_file = models.CharField(max_length=50, default=None, null=True)
-    adv_card_deck = models.CharField(max_length=50, default=None, null=True)
-    max_stock = models.IntegerField(default=55)
-    max_cities = models.IntegerField(default=9)
+class Board(models.Model):
+    game_settings = models.ForeignKey(GameSettings, on_delete=models.CASCADE, related_name='boards')
+    board_name = models.CharField(max_length=50)
+    board_file = models.CharField(max_length=50)
+    territories_file = models.CharField(max_length=50)
     max_players = models.IntegerField(default=18)
-    timespan = models.IntegerField(default=None, null=True)
+    board_geometry = models.JSONField()
 
-    def get_boards_civs(self):
-        path = os.path.join(Path(__file__).parent, 'assets', 'assets.json')
-        with open(path, 'r') as assets_file:
-            assets = load(assets_file)
+
+    def desc(self):
         return {
-            'boards': assets['boards'],
-            'civs': assets['civs']
+            'name': self.board_name,
+            'id': self.id,
+            'max_players': self.max_players,
+            'geometry': self.board_geometry
         }
-
-    def __str__(self):
-        return f'game settings {self.id}'
 
 class Territory(models.Model):
     geometry = models.JSONField()
@@ -435,13 +296,6 @@ class PlayerTerritory(models.Model):
             'boats': [boat.info for boat in self.boats]
         }
         return info
-
-class Civ(models.Model):
-    name = models.CharField(max_length=50)
-    pcolor = models.CharField(max_length=10)
-    scolor = models.CharField(max_length=10)
-    start_territory = models.CharField(max_length=50)
-    ast_rank = models.IntegerField()
 
 class AdvCard(models.Model):
     game = models.ForeignKey(Game, related_name='adv_cards', on_delete=models.CASCADE)
@@ -529,14 +383,3 @@ def create_player(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_player(sender, instance, **kwargs):
     instance.player.save()
-
-def get_or_create(Model, **kwargs)->object:
-    if 'id' in kwargs.keys():
-        model = Model(**kwargs)
-        model.save()
-    else:
-        try:
-            model = Model.objects.filter(**kwargs)[0]
-        except IndexError:
-            model = Model.objects.create(**kwargs)
-    return model

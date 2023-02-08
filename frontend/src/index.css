@@ -1,5 +1,6 @@
 body {
     margin: 0;
+    cursor: default;
 }
 
 main.container {
@@ -58,6 +59,7 @@ div.header {
 div.board {
     border: 1px solid;
     padding: 0;
+    position: relative;
 }
 
 div.panel {
@@ -107,18 +109,43 @@ div#players.panel {
     position: relative;
 }
 
-div.card {
-    border-radius: 5px;
-    border: 1px solid;
-    /* height: 100px; */
+div#gamesettings ul.settings{
     position: relative;
 }
 
-div.playercard {
-    padding: 0px;
+div#gamesettings ul.settings li {
+    position: relative;
+}
+
+div#gamesettings div.settingsname {
+    width: 50%;
+}
+
+div#gamesettings select {
+    position: absolute;
+    top: 0%;
+    right: 0%
+}
+
+div#gamesettings div.startgame {
+    border-radius: 5px;
+    border: 1px solid;
+    text-align: center;
+    width: 50%;
+    margin:auto;
+    cursor: pointer;
+}
+
+div#gamesettings div.startgame:hover {
+    box-shadow: 1px 1px 5px grey;
+}
+
+div.card {
+    border-radius: 5px;
+    border: 1px solid;
     cursor: pointer;
     position: relative;
-    padding:2%;
+    padding: 2%;
 }
 
 div.card:hover {
@@ -182,6 +209,43 @@ div#players.panel div.playerright {
     top: 15%;
 }
 
+div.over-board {
+    position: absolute;
+    z-index: 500;
+}
+/* 
+div.phases-span {
+    display: inline-flex;
+    flex-direction: row;
+} */
+
+div.phases {
+    width: 60%;
+    top: 0%;
+    margin-top: 1%;
+    left:20%;
+    border: 1px solid;
+    border-radius: 5px;
+    background-color:#faf9ff;
+    display:inline-flex;
+}
+
+div.phases div.phase {
+    position: relative;
+    flex: auto;
+    border: 1px solid;
+    height: 15px;
+    left: 0%;
+    padding: 3px;
+    text-align: center;
+}
+
+div.phases div.phase.highlight {
+    border: 1px gray solid;
+    background-color: #82c91e;
+    box-shadow: 0px 0px 10px yellow;
+}
+
 div.modal {
     display: block;
     position: fixed;
@@ -238,15 +302,22 @@ div.modal div.modal-content hr {
     padding-right: 45%;
 }
 
-div.modal div.modal-content div.modal-body ul {
-    margin-left: 5%;
-    padding: 0;
+div.modal div.modal-content div.modal-body {
+    padding: 0%;
+    overflow-y: scroll;
 }
 
-div.modal div.modal-content div.modal-body ul li {
+div.modal div.modal-content div.modal-body ul {
+    margin: 5%;
+    padding: 0%;
+}
+
+div.modal div.modal-content div.modal-body ul div.card {
     position: relative;
     list-style: none;
     font-size: 100%;
+    margin-top: 5%;
+    padding:2%
 }
 
 div.modal div.modal-content ul li span.right {
@@ -254,3 +325,22 @@ div.modal div.modal-content ul li span.right {
     right: 5%
 }
 
+div#board.no-board {
+    width: 100%;
+    display: inline-flex;
+    background-color: #faf9ff;
+    align-items: center;
+    justify-content: center;
+}
+
+div#board.no-board div.login {
+    border-radius: 10px;
+    background-color: #faf9ff;
+    border: 1px solid;
+    padding: 1%;
+}
+
+div.buttons-side {
+    display: inline-flex;
+    justify-content: center;
+}

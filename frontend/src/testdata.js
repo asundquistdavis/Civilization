@@ -78,6 +78,7 @@ const testTerritories = [
 const testState = {
     playerId: 0,
     gameId: 0,
+    games: [],
     turn: 0,
     phase: 'pre game',
     activePlayerId: 0,
@@ -97,8 +98,18 @@ const testState = {
     showHistory: false,
     showSettings: false,
     showInfo: false,
-    xChar: '\u2715'
+    showCivs: false,
+    showGames: false,
+    xChar: '\u2715',
+    action: testAction,
 };
+
+const testAction = {
+    players: [],
+    boadName: '',
+    advDeck: 'standard',
+    tradeDeck: 'standard',
+}
 
 const testBoard = [
     [

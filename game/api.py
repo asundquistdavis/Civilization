@@ -1,17 +1,19 @@
 from django.shortcuts import render
 from rest_framework.views import APIView, Response, status
-from game.models import Player, User, Game, Phase
-
-from .utils import _test_
+from .classes.Player import Player
+from .models import Game
 
 class Load(APIView):
     def get(self, req):
-
-        # simulate logging in, and starting new game with new game settings, civ, adv cards ect
-        _test_(req)
-
-        player:Player = req.user.player
-        info = player.load_info()
+        info = {}
+        if req.user.is_authenticated:
+            player:Player = req.user.player
+            if req.user.player.game:
+                info = player.load_info()
+            else:
+                info = Game.add_game(player)
+        else:
+            info = {'status': 'login required'}
         return Response(info, status=status.HTTP_200_OK)
 
 class Status(APIView):
@@ -29,14 +31,26 @@ class PreGame(APIView):
 
     def post(self, req):
         player:Player = req.user.player
-        info = player.pregame(req.data)
+        report = req.data
+        info = {}
+        if not report['type']:
+            info = {'message': 'function not found'}
+        elif report['type'] == 'selectCiv':
+            info = player.select_civ(report)
+        elif report['type'] == 'startGame':
+            info = player.game.start()
+        elif report['type'] == 'selectBoard':
+            info = player.game.select_board(report)
+        elif report['type'] == 'selectGame':
+            info = Game.objects.get(id=report['gameId']).add_player(player)
+        else:
+            info = {'message': 'function not found'}
         return Response(info, status=status.HTTP_200_OK)
 
 class StartTurn(APIView):
     def get(self, req):
         player:Player = req.user.player
-        game:Game = player.game
-        info = game.startturn_info(player)
+        info = player.startturn_info()
         return Response(info, status=status.HTTP_200_OK)
 
     def post(self, req):

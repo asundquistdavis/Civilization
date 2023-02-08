@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <header>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Civilization Online{% endblock %}</title>
+        <style>
+            .box {
+                position: absolute;
+                width: 20%;
+                left: 40%;
+                top:10%;
+                border: 1px solid;
+                border-radius: 10px;
+                overflow: hidden;
+            }
+
+            .header {
+                text-align: center;
+                font-size: 150%;
+                background-color: #ced4da;
+                padding:1%;
+            }
+
+            .body {
+                font-size: 100;
+                background-color: #faf9ff;
+                padding:2%;
+            }
+
+            .field {
+                padding: 1%;
+                position: relative;
+            }
+
+            .right {
+                position: absolute;
+                right:0%;
+                top: 0%;
+                padding-left: 1%;
+            }
+        </style>
+    </header>
+    <body>
+        {% block registration %}
+        {% endblock %}
+    </body>
+</html>

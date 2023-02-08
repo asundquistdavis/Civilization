@@ -2,27 +2,60 @@
     "boards":
     [
         {
-            "name": "test board #1",
-            "kwargs": 
-            {
-                "board_file": "test_board_1.json",
-                "territories_file": "test_territories_1.json",
-                "max_players": 2
-            }
+            "board_name": "test board #1",
+            "board_geometry": [
+                [
+                11.524872407376733,
+                42.879019584830985
+                ],
+                [
+                33.21704539770957,
+                34.16722269351206
+                ]
+            ],
+            "territories_file": "test_territories_1.json",
+            "max_players": 2
+        },
+        {
+            "board_name": "test board #2",
+            "board_geometry": [
+                [
+                11.524872407376733,
+                42.879019584830985
+                ],
+                [
+                33.21704539770957,
+                34.16722269351206
+                ]
+            ],
+            "territories_file": "test_territories_1.json",
+            "max_players": 5
         }
     ],
     "civs":
     [
         {
             "name": "egyptions",
-            "pcolor": "f1f1f1",
-            "scolor": "e0e0e0",
+            "pcolor": "#f8f8cb",
+            "scolor": "#000000",
             "start_territory": "Valentia",
             "ast_rank": 1
         },{
-            "name": "greeks",
-            "pcolor": "e005e0",
-            "scolor": "f110f1",
+            "name": "minoans",
+            "pcolor": "#0dd74a",
+            "scolor": "#000000",
+            "start_territory": "Western Sicily",
+            "ast_rank": 2
+        },{
+            "name": "macedonians",
+            "pcolor": "#f8f52a",
+            "scolor": "#000000",
+            "start_territory": "Western Sicily",
+            "ast_rank": 2
+        },{
+            "name": "romans",
+            "pcolor": "#e82a4c",
+            "scolor": "#000000",
             "start_territory": "Western Sicily",
             "ast_rank": 2
         }

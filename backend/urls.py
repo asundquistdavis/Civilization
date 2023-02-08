@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from frontend.views import index
+from registration.views import SignUp
 
 from game import urls as api
 
@@ -23,5 +24,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('', index, name='index'),
     path('api/', include(api), name='api'),
+    path('signup/', SignUp.as_view(), name='signup'),
     path('', include('django.contrib.auth.urls')),
 ]

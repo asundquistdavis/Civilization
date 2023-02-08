@@ -2,33 +2,44 @@ import React from "react";
 
 function renderPlayerCard(player) {
     
-    const infoType = this.state.infoType
-    let info = player.points
-    switch (infoType) {
-        case 'trade cards':
-            info = player.tradeCards? player.tradeCards.length: 0;
+    const phase = this.state.phase
+    let infoType = 'Points'
+    let info = player.points;
+    switch (phase) {
+        case 'start of game':
+            infoType = player.backTax? 'Revolting!': 'units';
+            info = player.backTax? '': player.census;
             break;
-        case 'census': 
-            info = player.census
+        case 'movement': 
+            infoType = 'units';
+            info = player.census;
+            break;
+        case 'trade':
+            info = player.tradeCards? player.tradeCards.length: 0;
+            infoType = 'Trade Cards';
             break;
         default:
-            info =player.points
+            info = player.points;
+            infoType = 'Points';
+            break;
     };
 
     return (
         <div
         className="card playercard"
         style={{backgroundColor: player.pcolor}}
-        onClick={() => this.selectNewPlayer(player)}>
+        onClick={() => {this.selectNewPlayer(player); this.state.phase==='pre game'? this.toggleCivs(): null}}>
             <span>
                 <div className="playerleft">
-                    <div className="name">{player.username}</div>
-                    <div className="civ">{player.civ}</div>
+                    <div className="name">{this.cap(player.username)}</div>
+                    <div className="civ">{player.civ? this.cap(player.civ): 'No Civilization Selected'}</div>
                 </div>
-                <div className="playerright">
-                    <div className='info'>{info}</div>
-                    <div className='infotype'>{infoType}</div>
-                </div>
+                {phase==='pre game'? (null):
+                    <div className="playerright">
+                        <div className='info'>{info}</div>
+                        <div className='infotype'>{infoType}</div>
+                    </div>
+                }
             </span>
         </div>
     )

@@ -3,8 +3,8 @@ import React from "react"
 function renderSelectedPalyer() {
     return (
         <div 
-        className="panel" 
-        id="selected">
+        className="panel"
+        id="right">
             <div className="title">{this.state.selectedPlayer.username}</div>
             <div className="subtitle">{this.state.selectedPlayer.civ}</div>
             <hr></hr>
