@@ -3,6 +3,15 @@ from rest_framework.views import APIView, Response, status
 from .classes.Player import Player
 from .models import Game
 
+
+class TestMovement(APIView):
+    def get(self, req):
+        # create a neww game with a host and at least one other player
+        # each player has a civ
+        # current phase = 'movement'
+        # board = 'test b   oard'
+        pass
+
 class Load(APIView):
     def get(self, req):
         info = {}
@@ -13,7 +22,7 @@ class Load(APIView):
             else:
                 info = Game.add_game(player)
         else:
-            info = {'status': 'login required'}
+            info = {'server': 'authreq'}
         return Response(info, status=status.HTTP_200_OK)
 
 class Status(APIView):
@@ -32,7 +41,7 @@ class PreGame(APIView):
     def post(self, req):
         player:Player = req.user.player
         report = req.data
-        info = {}
+        info = {'message': 'Not Set'}
         if not report['type']:
             info = {'message': 'function not found'}
         elif report['type'] == 'selectCiv':

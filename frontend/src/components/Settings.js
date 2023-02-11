@@ -11,9 +11,7 @@ export default function renderSettings() {
                     className="title" >
                         Settings
                     </div>
-                    <div                
-                    className='close subtitle close'
-                    onClick={this.toggleSettings}>
+                    <div className='close subtitle' onClick={this.toggleSettings}>
                         {this.state.xChar}
                     </div>
                 </div>

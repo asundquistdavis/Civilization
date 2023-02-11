@@ -34,16 +34,17 @@ class App extends Component {
         .then(res => {
             const data = res.data;
             console.log(data);
-            const { playerId, gameId, games, turn, phase, activePlayerId, isActivePlayer, board, boards, civs, players, territories, advCards } = data;
+            const { server, playerId, gameId, games, turn, phase, activePlayerId, isActivePlayer, board, boards, civs, players, territories, advCards } = data;
             this.setState({
+                server: server,
                 playerId: playerId,
                 gameId: gameId,
                 games: games,
                 turn: turn,
                 phase: phase,
                 activePlayerId: activePlayerId,
-                activePlayer: players.filter(player => player.id === activePlayerId)[0],
-                selectedPlayer: players[0],
+                activePlayer: players? players.filter(player => player.id === activePlayerId)[0]: [],
+                selectedPlayer: players? players[0]: {},
                 isActivePlayer: isActivePlayer,
                 isSelectedPlayer: (this.state.selectedPlayer.id===playerId),
                 selectedIsActive: (this.state.selectedPlayer.id===activePlayerId),
@@ -60,20 +61,22 @@ class App extends Component {
     updateData = () => {
         switch (this.state.phase) {
             case 'pre game':
-                axios.get('/api/pre-game/')
-                .then(res => {
-                    console.log(res.data)
-                    const { phase, players, games } = res.data;
-                    if (phase != this.state.phase)
-                        {this.loadData();}
-                    else
-                        {this.setState({
-                            phase: phase,
-                            games: games,
-                            players: players,
-                            selectedPlayer: players.filter(player => player.id === this.state.selectedPlayer.id)[0],
-                        });}
-                });
+                if (this.state.server != 'authreq') {
+                    axios.get('/api/pre-game/')
+                    .then(res => {
+                        console.log(res.data)
+                        const { phase, players, games } = res.data;
+                        if (phase != this.state.phase)
+                            {this.loadData();}
+                        else
+                            {this.setState({
+                                phase: phase,
+                                games: games,
+                                players: players,
+                                selectedPlayer: players.filter(player => player.id === this.state.selectedPlayer.id)[0],
+                            });}
+                    });
+                }
                 break;
             case 'start of turn':
                 axios.get('/api/start-of-turn/')
@@ -166,18 +169,14 @@ class App extends Component {
     };
 
     selectBoard = (boardId) => {
-        let report
+        let report;
         if (this.state.phase === 'pre game') {
             report = {
                 type: 'selectBoard',
                 boardId: boardId,
             };
             axios.post('/api/pre-game/', report).then(res => {
-                const {board, territories} = res.data;
-                this.setState({
-                    board: board,
-                    territories: territories, 
-                });
+                this.loadData()
             });
         };
     };
@@ -210,7 +209,6 @@ class App extends Component {
                 const { phase, players } = res.data
                 this.setState({
                     phase: phase,
-                    players: players
                 });
             });
         };
@@ -246,10 +244,10 @@ class App extends Component {
                     </div>
                     <div className='row bottom board'>
                         {this.state.board? 
-                            (<Board territories={this.state.territories} board={this.state.board}/>): 
+                            <Board territories={this.state.territories} board={this.state.board}/>: 
                         (this.state.playerId? 
                             this.renderNoBoard():
-                            (this.renderLoginRequired()))}
+                            this.renderLoginRequired())}
                         {this.state.board? 
                             this.renderPhases(): null}
                     </div>

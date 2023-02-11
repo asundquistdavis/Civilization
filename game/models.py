@@ -14,7 +14,6 @@ from .utils import get_or_create
 class Game(models.Model):
     phase = models.ForeignKey('Phase', on_delete=models.SET_NULL, null=True)
     active_player:Player = models.ForeignKey(Player, related_name='active_in_game', default=None, on_delete=models.SET_NULL, null=True)
-    settings = models.OneToOneField('GameSettings', related_name='game', default=None, on_delete=models.SET_NULL, null=True)
     phase = models.OneToOneField('Phase', related_name='game', on_delete=models.SET_NULL, default=None, null=True)
     host = models.ForeignKey(Player, related_name='host_for', on_delete=models.CASCADE)
 
@@ -81,12 +80,12 @@ class Game(models.Model):
 
     @staticmethod
     def add_game(player):
-        settings = GameSettings()
-        settings.save()
         phase = Phase(name='pre game')
         phase.save()
-        game = Game(host=player, settings=settings, phase=phase, active_player= player)
+        game = Game(host=player, phase=phase, active_player= player)
         game.save()
+        settings = GameSettings(game=game)
+        settings.save()
         player.game = game
         player.save()
 
@@ -98,17 +97,21 @@ class Game(models.Model):
     def select_board(self, report):
         board_id = report['boardId']
         board = Board.objects.get(id=board_id)
-        self.board = board
+        self.settings.board = board
+        self.load_territories()
         self.save()
 
     def start(self):
         # check that game can start - settings, players selected civs - assign defaults ect.
         # pass
         # crerat the start of turn phase phase
-        phase = Phase(name=self.PHASES[0], duration=self.timespan)
+        self.phase.name = self.PHASES[0]
+        self.phase.save()
         # run start of turn
-        self.start
-        return info
+        # self.collect_taxes()
+        return {
+            'phase': self.phase.name
+        }
 
     def load_adv_card_deck(self):
         path = os.path.join(Path(__file__).parent, 'assets', 'adv_card_decks', self.settings.adv_card_deck)
@@ -165,6 +168,7 @@ class Game(models.Model):
 
 class GameSettings(models.Model):
     board = models.ForeignKey('Board', related_name='void', default=None, on_delete=models.SET_NULL, null=True)
+    game = models.OneToOneField(Game, related_name='settings', on_delete=models.CASCADE)
     adv_card_deck = models.CharField(max_length=50, default=None, null=True)
     max_stock = models.IntegerField(default=55)
     max_cities = models.IntegerField(default=9)
@@ -184,6 +188,7 @@ class GameSettings(models.Model):
         for civ_kwargs in assets['civs']:
             get_or_create(Civ, game_settings=self, **civ_kwargs)
         self.board = self.boards.all()[0]
+        self.save()
         return {
             'boards': [board.desc() for board in Board.objects.filter(game_settings=self)],
             'civs': [civ.desc() for civ in Civ.objects.filter(game_settings=self)],
@@ -212,11 +217,9 @@ class Phase(models.Model):
 class Board(models.Model):
     game_settings = models.ForeignKey(GameSettings, on_delete=models.CASCADE, related_name='boards')
     board_name = models.CharField(max_length=50)
-    board_file = models.CharField(max_length=50)
     territories_file = models.CharField(max_length=50)
     max_players = models.IntegerField(default=18)
     board_geometry = models.JSONField()
-
 
     def desc(self):
         return {

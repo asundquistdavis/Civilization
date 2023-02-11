@@ -7,44 +7,47 @@ export default function renderGameSettings() {
             id="gamesettings">
             <div className="title">New Game Settings</div>
             <hr></hr>
-            <ul className="settings">
-                <li>
-                    <div className="settingsname">Board:</div>
-                    <select onChange={(e) => this.selectBoard(e.target)}>
-                        {this.state.boards? this.state.boards.map((board, index)=>
-                            <option key={index} value={board.id}>{board.name}</option>
-                        ): null}
-                    </select>
-                </li>
-                <li>
-                    <div className="settingsname"><button onClick={this.toggleCivs}>View Civilizations</button></div>
-                </li>
-                <li>
-                    <div className="settingsname">Trade Cards Deck:</div>
-                    <select onChange={this.tradeDeckSelect}>
-                        <option>Standard</option>
-                    </select>
-                </li>
-                <li>
-                    <div className="settingsname">Advancement Cards Deck:</div>
-                    <select onChange={this.advDeckSelect}>
-                        <option>Standard</option>
-                    </select>
-                </li>
-            </ul>
+            <div className="space-children v-spacer">
+                <div>Board:</div>
+                <div><select 
+                    onChange={(e) => this.selectBoard(e.target.value)}>
+                    {this.state.boards? this.state.boards.map((board, index)=>
+                        <option key={index} value={board.id}>{board.name}</option>
+                    ): null}
+                </select></div>
+            </div>
+            <div className="space-children v-spacer">
+                <div>Trade Cards Deck:</div>
+                <div><select 
+                    onChange={this.tradeDeckSelect}>
+                    <option>Standard</option>
+                </select></div>
+            </div>
+            <div className="space-children v-spacer">
+                <div>Advancement Cards Deck:</div>
+                <div><select 
+                onChange={this.advDeckSelect}>
+                    <option>Standard</option>
+                </select></div>
+            </div>
             <hr></hr>
             <div
-            className="buttons-side">
+                className="space-children v-spacer">
                 <div 
-                    onClick={this.startGame}
-                    className="startgame">
-                    Start Game
+                    className="button" 
+                    onClick={this.toggleCivs}>
+                    Change Civilizations
                 </div>
                 <div 
                     onClick={this.toggleGames}
-                    className="startgame">
-                    View Games
+                    className="button">
+                    Change Games
                 </div>
+            </div>
+            <div
+                onClick={this.startGame}
+                className="button v-spacer">
+                Start Game
             </div>
         </div>
     )

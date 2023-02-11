@@ -32,6 +32,8 @@ class Board extends Component {
         this.territories = createRef();
         this.selectedTerritory = createRef();
         this.state = {
+            territories: this.props.territories,
+            board: this.props.board,
             selectedTerritory: null
         }
     };
@@ -108,7 +110,7 @@ class Board extends Component {
 
         const geojson = {
             type: "FeatureCollection",
-            features: this.props.territories.map(territory => {
+            features: this.state.territories.map(territory => {
                 return {
                     type: "Feature",
                     properties: {
@@ -125,7 +127,7 @@ class Board extends Component {
             })
         };
 
-    const mapBounds = latLngBounds(...this.props.board.map(coor => latLng([coor[1], coor[0]])));
+    const mapBounds = latLngBounds(...this.state.board.map(coor => latLng([coor[1], coor[0]])));
 
         return (
             <MapContainer 

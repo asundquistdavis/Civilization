@@ -30,8 +30,7 @@ export default function renderGames() {
                                     className="card"
                                     onClick={() => {this.selectGame(game.id); this.toggleGames();}}>
                                         <div className="title">{game.name}</div>
-                                        <div className="subtitle">{game.host}</div>
-                                        <div className="subtitle">{(game.maxPlayers & game.players)? game.players.length+'/'+game.maxPlayers: null}</div>
+                                        <div className="subtitle">Host: {game.host}</div>
                                     </div>
                                 )
                             })
