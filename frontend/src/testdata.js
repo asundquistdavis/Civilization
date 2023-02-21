@@ -28,7 +28,6 @@ const testPlayers = [
         scolor: '#000000',
         civ: 'egyptains',
         astRank: 0,
-        cards: 0,
         census: 0,
         points: 0,
         treasury: 0,
@@ -48,6 +47,96 @@ const testPlayers = [
             }
         ]
     },
+];
+
+export const tmPlayers = [
+    {
+        id: 0,
+        username: 'Andrew',
+        pcolor: '#f8f8cb',
+        scolor: '#000000',
+        civ: 'egyptains',
+        astRank: 5,
+        census: 30,
+        points: 30,
+        treasury: 15,
+        tax: 10,
+        backTax: 0,
+        stock: 10,
+        units: 30,
+        cities: 5,
+        movementOrder: 1,
+        benneficiaryOrder: 2,
+        advCards: testAdvCards[0].name,
+        tradeCards: [
+            {
+                name: 'ochre',
+                level: 1,
+                max_level: 8,
+            },
+            {
+                name: 'ochre',
+                level: 1,
+                max_level: 8,
+            },
+            {
+                name: 'cloth',
+                level: 5,
+                max_level: 6,
+            },
+            {
+                name: 'cloth',
+                level: 5,
+                max_level: 6,
+            },
+            {
+                name: 'cloth',
+                level: 5,
+                max_level: 6,
+            },
+            {
+                name: 'cloth',
+                level: 5,
+                max_level: 6,
+            }
+        ]
+    },
+    {
+        id: 1,
+        username: 'John',
+        pcolor: '#0ab4c1',
+        scolor: '#000000',
+        civ: 'assyrians',
+        astRank: 9,
+        census: 20,
+        points: 23,
+        treasury: 8,
+        tax: 8,
+        backTax: 0,
+        stock: 27,
+        units: 20,
+        cities: 4,
+        movementOrder: 2,
+        benneficiaryOrder: 1,
+        advCards: testAdvCards[0].name,
+        tradeCards: [
+            {
+                name: 'wool',
+                level: 4,
+                max_level: 5,
+            },
+            {
+                name: 'wool',
+                level: 4,
+                max_level: 5,
+            },
+            {
+                name: 'wool',
+                level: 4,
+                max_level: 5,
+            }
+        ]
+    }
 ];
 
 const testTerritories = [
@@ -92,6 +181,8 @@ const testState = {
     board: testBoard,
     territories: testTerritories,
     advCards: testAdvCards,
+
+    playersOrder: 'census',
     infoType: 'trade cards',
     showStats: false,
     showTradeCards: false,
@@ -101,8 +192,18 @@ const testState = {
     showInfo: false,
     showCivs: false,
     showGames: false,
+    showTerritoryCardA: false,
+    showOverBoardAction: false,
+    showTerritoryCardB: false,
     xChar: '\u2715',
     action: testAction,
+    selectedLayerA: null,
+    selectedTerritoryA: null,
+    selectedLayerB: null,
+    selectedTerritoryB: null,
+    isMoving: false,
+    unitsToMove: 0,
+    stagedMoves: []
 };
 
 const testAction = {

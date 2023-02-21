@@ -17,13 +17,13 @@ function renderPlayers() {
             </div>
             <hr></hr>
             <div>
-                <ul>
                     {this.state.players? orderedPlayers.map((player, index)=>(
-                    <li key={index}>
-                    {this.renderPlayerCard(player)}
-                    </li>
+                    <div 
+                    key={index}
+                    className={this.activePlayer}>
+                        {this.renderPlayerCard(player)}
+                    </div>
                     )): null}
-                </ul>
             </div>
         </div>
     );

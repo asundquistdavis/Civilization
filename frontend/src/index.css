@@ -1,40 +1,8 @@
-body {
+body, html {
+    position: relative;
     margin: 0;
+    height: 100%;
     cursor: default;
-}
-
-main.container {
-    height: 100%;
-    width: 100%;
-    padding: 0%;
-    margin: 0%;
-    display: flex;
-    padding-top: 1%;
-}
-
-div.col {
-    padding-right: 1%;
-}
-
-div.col:first-child {
-    padding-left: 1%;
-}
-
-div.left {
-    width: 20%;
-}
-
-div.center {
-    width: 60%;
-    height: 100%;
-}
-
-div.right {
-    width: 20%;
-}
-
-div.row.top {
-    padding-bottom: 1%;
 }
 
 .title {
@@ -140,6 +108,7 @@ div.card {
     cursor: pointer;
     position: relative;
     padding: 2%;
+    /* background-color: #faf9ff; */
 }
 
 div.card:hover {
@@ -149,20 +118,6 @@ div.card:hover {
 div.panel hr {
     margin-left: 5%;
     margin-right: 5%;
-}
-
-div.panel ul {
-    list-style-type: none;
-    padding: 0%;
-    margin: 0;
-}
-
-div.panel li {
-    margin-bottom: 5%;
-}
-
-div.panel li:last-child{
-    margin:0%;
 }
 
 div.panel div.playerleft {
@@ -259,6 +214,7 @@ div.modal {
 div.modal div.modal-content{
     margin: auto;
     width: 300px;
+    max-block-size: 100%;
     background-color: #faf9ff;
     border-radius: 10px;
     border: 1px solid;
@@ -298,7 +254,7 @@ div.modal div.modal-content hr {
 
 div.modal div.modal-content div.modal-body {
     padding: 0%;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
 }
 
 div.modal div.modal-content div.modal-body ul {
@@ -341,7 +297,21 @@ div.buttons-side {
 
 /* settings */
 
+div.right-children {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+div.right-children div {
+    margin-left: 5%;
+}
+
 div.space-children {
+    height: 100%;
     width: 100%;
     display: flex;
     justify-content:space-between;
@@ -358,8 +328,69 @@ div.space-children div:first-child {
     margin-left: 0%;
 }
 
+div.seperate-children {
+    /* height: 100%; */
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+div.seperate-children:first-child {
+    margin-left: 5%;
+    justify-content: flex-start;
+}
+
+div.seperate-children:last-child {
+    margin-right: 5%;
+    justify-content: flex-end;
+}
+
 div.v-spacer{
     margin-top: 2%;
+}
+
+div.space-vertically {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+div.left-overlap {
+    margin-left: -20px;
+}
+
+div.trade-cards {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    height: 100%;
+}
+
+div.selected-players {
+    height: 125px;
+    margin-bottom: 2%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+div.selcted-players:first-child {
+    margin-top: 2%;
+}
+
+div.support-token {
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    width: 10%;
+    border-radius: 15%;
+    background-color: #ced4da;
+    text-align: center;
+}
+
+div.city-token {
+    border-radius: 50%;
 }
 
 /* features */
@@ -388,3 +419,173 @@ div.button:hover {
     box-shadow: 3px 3px 5px grey;
 }
 
+div.inactive {
+    background-color: #ced4da;
+}
+
+div.inactive:hover {
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+div.button-action {
+    height: 100%;
+    font-size: 100%;
+    padding: 3px;
+}
+
+div.tc-back-outer {
+    display: flex;  
+    aspect-ratio: .7;
+    position:relative;
+    background-color: #c4a484;
+    border: 1px solid;    
+    border-radius: 10px;
+    text-overflow: ellipsis;
+}
+
+div.tc-back-inner {
+    position: relative;
+    background-color: #9d836a;
+    border-radius: 10px;
+    height: 100%;
+    margin: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+div.tc-back-text {
+    font-size: 500%;
+}
+
+div.trade-card {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+div.trade-card:last-child {
+    overflow: visible;
+}
+
+div.territory-card {
+    position: absolute;
+    bottom: 5%;
+    height: 20%;
+    width: 25%;   
+    background-color: #faf9ff;
+}
+
+div.ter-card-a {
+    left: 5%
+}
+
+div.territory-card-header {
+    min-height: 20%;
+}
+
+div.territory-card-title {
+    height: 100%
+}
+
+div.territory-card-tokens {
+    height: 100%;
+}
+
+div.ter-card-b {
+    right: 5%;
+}
+
+div.units-token {
+    width: 15%;
+    aspect-ratio: 1 / 1;
+    text-align: center;
+    font-size: 150%;
+    border-radius: 15%;
+    border: 1px solid;
+    position: relative;
+}
+
+div.coming {
+    z-index: 999;
+    border: 1px solid;
+    position: absolute;
+    border-radius: 50%;
+    background-color: #ced4da;
+    left: -25%;
+}
+
+div.token {
+    height: 100%;
+    width: 10%;
+    aspect-ratio: 1 / 1;
+    background-color: #ced4da;
+    border: 1px solid;
+}
+
+div.territory-units {
+    display: flex;
+}
+
+div.territory-units div {
+    margin-right: 5%;
+}
+
+div.action-position {
+    bottom:5%;
+    width: 100%;
+}
+
+div.action {
+    margin-left: 40%;
+    margin-right: 40%;
+    background-color: #faf9ff;
+    text-align: center;
+}
+
+main.container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    padding: 0%;
+    margin: 0%;
+    display: inline-flex;
+    justify-content: center;
+    padding-top: 1%;
+}
+
+div.col {
+    padding-right: 1%;
+    height: 100%;
+}
+
+div.col:first-child {
+    padding-left: 1%;
+}
+
+div.left {
+    width: 20%;
+}
+
+div.center {
+    width: 60%;
+    height: 100%;
+}
+
+div.right {
+    height: 100%;
+    width: 20%;
+}
+
+div.row {
+    margin-bottom: 1.5%;
+}
+
+
+
+
+div.tester {
+    height: 175px;
+    width: 100px;
+}

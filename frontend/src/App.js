@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React, { Component, createRef } from 'react'
 import axios from 'axios';
-import testState from './testdata';
+import testState, {tmPlayers} from './testdata';
 import renderSelectedPalyer from './components/SelectedPlayer';
-import Board, {renderNoBoard, renderLoginRequired} from './components/Board';
+import {renderBoard, renderNoBoard, renderLoginRequired, renderTerritoryCardA, renderOverBoardAction, renderTerritoryCardB} from './components/Board';
 import renderHeader from './components/Header';
 import renderPlayers from './components/Players';
 import renderPlayerCard from './components/PlayerCard';
@@ -16,6 +16,8 @@ import renderPhases from './components/Phases';
 import renderGameSettings from './components/GameSettings';
 import renderCivs from './components/Civs';
 import renderGames from './components/Games';
+import { renderTradeCardBack } from './components/TradeCard';
+import renderDevTools from './DevTools';
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -27,6 +29,8 @@ class App extends Component {
     constructor(props) {
         super(props)
         this.state = testState;
+        this.board = createRef();
+        this.territories = createRef();
     };
 
     loadData = () => {
@@ -64,7 +68,6 @@ class App extends Component {
                 if (this.state.server != 'authreq') {
                     axios.get('/api/pre-game/')
                     .then(res => {
-                        console.log(res.data)
                         const { phase, players, games } = res.data;
                         if (phase != this.state.phase)
                             {this.loadData();}
@@ -93,17 +96,17 @@ class App extends Component {
     };
 
     componentDidMount() {
-        this.interval = setInterval(this.updateData, 15000);
+        this.updateInterval = setInterval(this.updateData, 15000);
         this.loadData();
     };
 
     componentWillUnmount() {
-        clearInterval(this.interval);
-    }
+        clearInterval(this.updateInterval);
+    };
 
     cap(str) {
         return str.charAt(0).toUpperCase() + str.slice(1);
-    }
+    };
 
     toggleStats = () => {
         this.setState({showStats: !this.state.showStats});
@@ -134,7 +137,6 @@ class App extends Component {
     };
 
     toggleGames = () => {
-        console.log('fire!')
         this.setState({showGames: !this.state.showGames});
     };
 
@@ -148,7 +150,10 @@ class App extends Component {
     };
 
     selectNewPlayer = (player) => {
-        this.setState({selectedPlayer: player});
+        this.setState({
+            selectedPlayer: player,
+            selectedIsActive: this.state.activePlayerId === player.id
+        });
     };
 
     selectNewOrder = (e) => {
@@ -163,7 +168,6 @@ class App extends Component {
         };
         axios.post('/api/pre-game/', report)
         .then(res => {
-            console.log(res.data)
             this.loadData()
         });
     };
@@ -214,6 +218,59 @@ class App extends Component {
         };
     };
 
+    startMove = () => {
+        this.setState({isMoving: true})
+    };
+
+    calcUnits = (territoryId, playerId, coming=false) => {
+        let units = 0;
+        const player = this.state.players.filter(player => player.id === playerId)? this.state.players.filter(player => player.id === playerId)[0]: null;
+        const territory = this.state.territories.filter(territory => territory.id === territoryId)? this.state.territories.filter(territory => territory.id === territoryId)[0]: null;
+        
+        if (!!player & !!territory) {
+            const playerTerritory = territory? 
+                territory.players.filter(player => player.playerId === playerId)?
+                territory.players.filter(player => player.playerId === playerId)[0]
+            : null: null;
+            const stagedMoves = coming? (
+                    this.state.stagedMoves? 
+                    this.state.stagedMoves.filter(move => move.territoryToId === territoryId)? 
+                    this.state.stagedMoves.filter(move => move.territoryToId === territoryId).filter(move => move.playerId === playerId)? 
+                    this.state.stagedMoves.filter(move => move.territoryToId === territoryId).filter(move => move.playerId === playerId)
+                    : []: []: []
+                ): (
+                    this.state.stagedMoves? 
+                    this.state.stagedMoves.filter(move => move.territoryFromId === territoryId)? 
+                    this.state.stagedMoves.filter(move => move.territoryFromId === territoryId).filter(move => move.playerId === playerId)? 
+                    this.state.stagedMoves.filter(move => move.territoryFromId === territoryId).filter(move => move.playerId === playerId)
+                    : []: []: []
+                );
+                if (coming) {
+                    units = stagedMoves? stagedMoves.reduce((parSum, move) => parSum + move.units, 0): 0;
+                } else {
+                    units = (playerTerritory? playerTerritory.units: 0) - (stagedMoves? stagedMoves.reduce((parSum, move) => parSum + move.units, 0): 0);
+                }
+        };
+        return units;
+    };
+    
+    testMovement = () => {
+        clearInterval(this.updateInterval);
+        this.setState({
+            players: tmPlayers,
+            phase: 'movement',
+            activePlayer: tmPlayers[0],
+            activePlayerId: tmPlayers[0].id,
+        });
+    };
+
+    renderDevTools = renderDevTools;
+    
+    renderOverBoardAction = renderOverBoardAction;
+    renderTerritoryCardB = renderTerritoryCardB;
+    renderTerritoryCardA = renderTerritoryCardA;
+    renderBoard = renderBoard;
+    renderTradeCardBack = renderTradeCardBack;
     renderGames = renderGames;
     renderNoBoard = renderNoBoard;
     renderLoginRequired = renderLoginRequired;
@@ -244,12 +301,21 @@ class App extends Component {
                     </div>
                     <div className='row bottom board'>
                         {this.state.board? 
-                            <Board territories={this.state.territories} board={this.state.board}/>: 
+                            this.renderBoard():
                         (this.state.playerId? 
                             this.renderNoBoard():
                             this.renderLoginRequired())}
                         {this.state.board? 
                             this.renderPhases(): null}
+                        {this.state.board?
+                            this.renderTerritoryCardA(): null}
+                        {this.state.board?
+                            this.renderOverBoardAction(): null}
+                        {this.state.board?
+                            this.renderTerritoryCardB(): null}
+                    </div>
+                    <div className='row dev'>
+                        {this.renderDevTools()}
                     </div>
                 </div>
                 <div className="col right">

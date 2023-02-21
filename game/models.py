@@ -296,7 +296,7 @@ class PlayerTerritory(models.Model):
             'territoryId': self.territory.id, #int
             'units': self.units, # int
             'hasCity': self.has_city, #bool
-            'boats': [boat.info for boat in self.boats]
+            'boats': [boat.info for boat in self.boats.all()]
         }
         return info
 

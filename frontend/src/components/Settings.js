@@ -17,8 +17,8 @@ export default function renderSettings() {
                 </div>
                 <hr></hr>
                 <div
-                className='modal-body'>            
-
+                className='modal-body tester'>      
+                    {this.renderTradeCardBack()}
                 </div>
             </div>
         </div>
